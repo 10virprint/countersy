@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRINT RECORD DATA BASE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --primary-light: #58d68d;
+            --primary-dark: #27ae60;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --success: #2ecc71;
+            --light: #f8f9fa;
+            --light-green: #e8f6f3;
+            --light-gray: #e9ecef;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+            --border-radius: 16px;
+            --card-shadow: 0 8px 30px rgba(46, 204, 113, 0.15);
+            --element-shadow: 0 4px 12px rgba(46, 204, 113, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e9 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Smart Header */
+        .app-header {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            animation: headerSlideDown 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: iconPulse 1.5s ease-out;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: textFadeIn 1s ease-out;
+        }
+
+        /* Note Section */
+        .note-section {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--primary);
+            animation: noteSlideUp 1s ease-out 0.3s both;
+        }
+
+        .note-text {
+            font-size: 0.95rem;
+            color: var(--dark);
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .note-icon {
+            color: var(--primary);
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            margin-bottom: 20px;
+            animation: formFadeIn 0.8s ease-out 0.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+            animation: formSlideUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.7s; }
+        .form-group:nth-child(2) { animation-delay: 0.8s; }
+        .form-group:nth-child(3) { animation-delay: 0.9s; }
+        .form-group:nth-child(4) { animation-delay: 1s; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .label-icon {
+            color: var(--primary);
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background: white;
+            box-shadow: var(--element-shadow);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+            transform: translateY(-2px);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-submit {
+            margin-top: 10px;
+        }
+
+        .btn-reset {
+            background: var(--gray);
+            box-shadow: 0 4px 15px rgba(127, 140, 141, 0.3);
+            margin-top: 12px;
+        }
+
+        .btn-reset:hover {
+            background: #6c757d;
+            box-shadow: 0 6px 20px rgba(127, 140, 141, 0.4);
+        }
+
+        .btn-new {
+            background: var(--secondary);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            margin-top: 12px;
+        }
+
+        .btn-new:hover {
+            background: #2980b9;
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .success-message {
+            background: white;
+            color: var(--dark);
+            padding: 30px 25px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-top: 20px;
+            animation: successZoomIn 0.6s ease-out;
+            box-shadow: var(--card-shadow);
+            display: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+        }
+
+        .success-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: var(--success);
+            animation: successBounce 1s ease;
+        }
+
+        .success-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .success-text {
+            font-size: 0.95rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        .form-footer {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            animation: footerFadeIn 1s ease-out 1.2s both;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes headerSlideDown {
+            from { 
+                opacity: 0; 
+                transform: translateY(-30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes iconPulse {
+            0% { 
+                transform: scale(0.8); 
+                opacity: 0; 
+            }
+            70% { 
+                transform: scale(1.1); 
+            }
+            100% { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+        }
+
+        @keyframes textFadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(8px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes noteSlideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(15px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes formFadeIn {
+            from { 
+                opacity: 0; 
+            }
+            to { 
+                opacity: 1; 
+            }
+        }
+
+        @keyframes formSlideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(15px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes successZoomIn {
+            from { 
+                opacity: 0; 
+                transform: scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+        }
+
+        @keyframes successBounce {
+            0%, 20%, 50%, 80%, 100% { 
+                transform: translateY(0); 
+            }
+            40% { 
+                transform: translateY(-8px); 
+            }
+            60% { 
+                transform: translateY(-4px); 
+            }
+        }
+
+        @keyframes footerFadeIn {
+            from { 
+                opacity: 0; 
+            }
+            to { 
+                opacity: 1; 
+            }
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .app-header {
+                padding: 18px;
+            }
+            
+            .note-section, .form-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+            
+            .note-text {
+                font-size: 0.9rem;
+            }
+            
+            input, select, textarea {
+                padding: 12px 14px;
+            }
+            
+            .btn {
+                padding: 14px 20px;
+            }
+            
+            .header-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.6rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Grid pattern for header */
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 15px 15px;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Smart Header -->
+        <div class="app-header">
+            <div class="grid-pattern"></div>
+            <div class="header-content">
+                <div class="header-icon">
+                    <i class="fas fa-print"></i>
+                </div>
+                <h1>PRINT RECORD DATA BASE</h1>
+            </div>
+        </div>
+
+        <!-- Note Section -->
+        <div class="note-section">
+            <p class="note-text">
+                <i class="fas fa-info-circle note-icon"></i>
+                ඔබ ලබාගන්නා මුද්‍රිත පිටපත් ගනන සටහන් කිරිමට මෙම විස්තර සම්පුර්ණකර Submit කරන්න
+                (ඔබට ලබාදි ඇති PIN අංකය පමණක් භාවිතා කරන්න)
+            </p>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <!-- Main Form -->
+            <div id="mainForm">
+                <form id="customForm">
+                    <div class="form-group">
+                        <label for="pin">
+                            <i class="fas fa-key label-icon"></i>
+                            ඔබගේ PIN අංකය ඇතුලත් කරන්න *
+                        </label>
+                        <div class="input-with-icon">
+                            <input type="text" id="pin" name="pin" placeholder="ඔබගේ PIN අංකය ඇතුලත් කරන්න" required>
+                            <i class="fas fa-user-lock input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pages">
+                            <i class="fas fa-copy label-icon"></i>
+                            ලබාගත් පිටපත් සංඛ්‍යාව (පිටු ගණන) *
+                        </label>
+                        <div class="input-with-icon">
+                            <input type="number" id="pages" name="pages" placeholder="පිටු ගණන ඇතුලත් කරන්න" required min="1">
+                            <i class="fas fa-file-alt input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reason">
+                            <i class="fas fa-comment-dots label-icon"></i>
+                            මුද්‍රිත පිටපත් ලබාගත් හේතුව (විස්තරය) *
+                        </label>
+                        <textarea id="reason" name="reason" placeholder="මුද්‍රිත පිටපත් ලබාගත් හේතුව විස්තර කරන්න" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="authorized">
+                            <i class="fas fa-user-check label-icon"></i>
+                            Authorized By *
+                        </label>
+                        <div class="input-with-icon">
+                            <select id="authorized" name="authorized" required>
+                                <option value="">තෝරන්න</option>
+                                <option value="CC">CC</option>
+                                <option value="2IC">2IC</option>
+                                <option value="CO">CO</option>
+                                <option value="ADJUTANT">ADJUTANT</option>
+                                <option value="IO">IO</option>
+                                <option value="OC">OC</option>
+                            </select>
+                            <i class="fas fa-chevron-down input-icon"></i>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-submit">
+                        <i class="fas fa-paper-plane"></i> සබිමිටි කරන්න
+                    </button>
+                    <button type="reset" class="btn btn-reset">
+                        <i class="fas fa-eraser"></i> පෝරමය හිස් කරන්න
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <div class="success-content">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="success-title">ස්තුතියි!</h3>
+                    <p class="success-text">ඔබගේ පිළිතුර සාර්ථකව යොමු කර ඇත</p>
+                    <p class="success-text">ඔබගේ මුද්‍රිත පිටපත් ලියාපදිංචි කිරීම සාර්ථකව සම්පූර්ණ විය</p>
+                    <button class="btn btn-new" onclick="showNewForm()">
+                        <i class="fas fa-plus-circle"></i> නව පිටපත් ලියාපදිංචි කිරීම
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-footer">
+            <p>මෙම custom form එක ඔබගේ Google Form එකට දත්ත ස්වයංක්‍රීයව යොමු කරයි</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('customForm');
+            const successMessage = document.getElementById('successMessage');
+            const mainForm = document.getElementById('mainForm');
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Show loading state
+                const submitBtn = form.querySelector('.btn-submit');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<div class="loading"></div> යොමු කරමින්...';
+                submitBtn.disabled = true;
+                
+                // Collect form data
+                const formData = {
+                    'entry.1544698449': document.getElementById('pin').value, // PIN number
+                    'entry.1039603348': document.getElementById('pages').value, // Page count
+                    'entry.1961805279': document.getElementById('reason').value, // Reason
+                    'entry.957011741': document.getElementById('authorized').value // Authorized by
+                };
+                
+                // Submit to Google Form using fetch API (no redirect)
+                submitToGoogleForm(formData)
+                    .then(() => {
+                        // Show success message with animation
+                        mainForm.style.display = 'none';
+                        successMessage.style.display = 'block';
+                        
+                        // Reset button state
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    })
+                    .catch((error) => {
+                        console.error('Submission error:', error);
+                        alert('දෝෂයක් ඇත! කරුණාකර නැවත උත්සාහ කරන්න.');
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    });
+            });
+            
+            // Function to submit data to Google Form using fetch
+            function submitToGoogleForm(data) {
+                // Your Google Form submission URL
+                const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSeSp-M27SZhBPOZ5MLijlGbRqmfOgMowG_QI1oNQGwmUySQiA/formResponse';
+                
+                // Create URLSearchParams from data
+                const formData = new URLSearchParams();
+                
+                // Add main form data
+                for (const [key, value] of Object.entries(data)) {
+                    formData.append(key, value);
+                }
+                
+                // Add additional required hidden fields
+                formData.append('fvv', '1');
+                formData.append('partialResponse', '[null,null,"6633782478489438740"]');
+                formData.append('pageHistory', '0');
+                formData.append('fbzx', '6633782478489438740');
+                formData.append('submissionTimestamp', Date.now().toString());
+                
+                // Use fetch to submit the form (no redirect)
+                return fetch(formUrl, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' // Important: prevents CORS issues
+                });
+            }
+            
+            // Form reset
+            form.addEventListener('reset', function() {
+                // Just clear the form, no special handling needed
+            });
+        });
+        
+        // Function to show new form for another submission
+        function showNewForm() {
+            const successMessage = document.getElementById('successMessage');
+            const mainForm = document.getElementById('mainForm');
+            const form = document.getElementById('customForm');
+            
+            // Reset the form
+            form.reset();
+            
+            // Show form and hide success message
+            successMessage.style.display = 'none';
+            mainForm.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
