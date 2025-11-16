@@ -44,8 +44,23 @@
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 1200px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .left-column, .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
         }
 
         /* Smart Header */
@@ -60,6 +75,7 @@
             position: relative;
             overflow: hidden;
             color: white;
+            grid-column: 1 / -1;
         }
 
         .header-content {
@@ -325,6 +341,131 @@
             display: none;
         }
 
+        /* Chart Container */
+        .chart-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            margin-bottom: 20px;
+            animation: formFadeIn 0.8s ease-out 0.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-icon {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chart-btn {
+            background: var(--light-gray);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .chart-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .chart-frame {
+            width: 100%;
+            height: 327px;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--element-shadow);
+        }
+
+        /* Total Chart Container */
+        .total-chart-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            margin-top: 15px;
+            animation: formFadeIn 0.8s ease-out 0.7s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .total-chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+        }
+
+        .total-chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .total-chart-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .total-chart-icon {
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .total-chart-frame {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--element-shadow);
+        }
+
         /* Animations */
         @keyframes headerSlideDown {
             from { 
@@ -435,7 +576,7 @@
                 padding: 18px;
             }
             
-            .note-section, .form-container {
+            .note-section, .form-container, .chart-container, .total-chart-container {
                 padding: 20px;
             }
             
@@ -459,6 +600,10 @@
                 width: 50px;
                 height: 50px;
                 font-size: 1.6rem;
+            }
+            
+            .chart-frame {
+                height: 250px;
             }
         }
 
@@ -505,96 +650,143 @@
             </div>
         </div>
 
-        <!-- Note Section -->
-        <div class="note-section">
-            <p class="note-text">
-                <i class="fas fa-info-circle note-icon"></i>
-                ඔබ ලබාගන්නා මුද්‍රිත පිටපත් ගනන සටහන් කිරිමට මෙම විස්තර සම්පුර්ණකර Submit කරන්න
-                (ඔබට ලබාදි ඇති PIN අංකය පමණක් භාවිතා කරන්න)
-            </p>
-        </div>
-
-        <!-- Form Container -->
-        <div class="form-container">
-            <!-- Main Form -->
-            <div id="mainForm">
-                <form id="customForm">
-                    <div class="form-group">
-                        <label for="pin">
-                            <i class="fas fa-key label-icon"></i>
-                            ඔබගේ PIN අංකය ඇතුලත් කරන්න *
-                        </label>
-                        <div class="input-with-icon">
-                            <input type="text" id="pin" name="pin" placeholder="ඔබගේ PIN අංකය ඇතුලත් කරන්න" required>
-                            <i class="fas fa-user-lock input-icon"></i>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="pages">
-                            <i class="fas fa-copy label-icon"></i>
-                            ලබාගත් පිටපත් සංඛ්‍යාව (පිටු ගණන) *
-                        </label>
-                        <div class="input-with-icon">
-                            <input type="number" id="pages" name="pages" placeholder="පිටු ගණන ඇතුලත් කරන්න" required min="1">
-                            <i class="fas fa-file-alt input-icon"></i>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reason">
-                            <i class="fas fa-comment-dots label-icon"></i>
-                            මුද්‍රිත පිටපත් ලබාගත් හේතුව (විස්තරය) *
-                        </label>
-                        <textarea id="reason" name="reason" placeholder="මුද්‍රිත පිටපත් ලබාගත් හේතුව විස්තර කරන්න" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="authorized">
-                            <i class="fas fa-user-check label-icon"></i>
-                            Authorized By *
-                        </label>
-                        <div class="input-with-icon">
-                            <select id="authorized" name="authorized" required>
-                                <option value="">තෝරන්න</option>
-                                <option value="CC">CC</option>
-                                <option value="2IC">2IC</option>
-                                <option value="CO">CO</option>
-                                <option value="ADJUTANT">ADJUTANT</option>
-                                <option value="IO">IO</option>
-                                <option value="OC">OC</option>
-                            </select>
-                            <i class="fas fa-chevron-down input-icon"></i>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-submit">
-                        <i class="fas fa-paper-plane"></i> සබිමිටි කරන්න
-                    </button>
-                    <button type="reset" class="btn btn-reset">
-                        <i class="fas fa-eraser"></i> පෝරමය හිස් කරන්න
-                    </button>
-                </form>
+        <!-- Left Column - Form -->
+        <div class="left-column">
+            <!-- Note Section -->
+            <div class="note-section">
+                <p class="note-text">
+                    <i class="fas fa-info-circle note-icon"></i>
+                    ඔබ ලබාගන්නා මුද්‍රිත පිටපත් ගනන සටහන් කිරිමට මෙම විස්තර සම්පුර්ණකර Submit කරන්න
+                    (ඔබට ලබාදි ඇති PIN අංකය පමණක් භාවිතා කරන්න)
+                </p>
             </div>
 
-            <!-- Success Message -->
-            <div class="success-message" id="successMessage">
-                <div class="success-content">
-                    <div class="success-icon">
-                        <i class="fas fa-check-circle"></i>
+            <!-- Form Container -->
+            <div class="form-container">
+                <!-- Main Form -->
+                <div id="mainForm">
+                    <form id="customForm">
+                        <div class="form-group">
+                            <label for="pin">
+                                <i class="fas fa-key label-icon"></i>
+                                ඔබගේ PIN අංකය ඇතුලත් කරන්න *
+                            </label>
+                            <div class="input-with-icon">
+                                <input type="text" id="pin" name="pin" placeholder="ඔබගේ PIN අංකය ඇතුලත් කරන්න" required>
+                                <i class="fas fa-user-lock input-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pages">
+                                <i class="fas fa-copy label-icon"></i>
+                                ලබාගත් පිටපත් සංඛ්‍යාව (පිටු ගණන) *
+                            </label>
+                            <div class="input-with-icon">
+                                <input type="number" id="pages" name="pages" placeholder="පිටු ගණන ඇතුලත් කරන්න" required min="1">
+                                <i class="fas fa-file-alt input-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reason">
+                                <i class="fas fa-comment-dots label-icon"></i>
+                                මුද්‍රිත පිටපත් ලබාගත් හේතුව (විස්තරය) *
+                            </label>
+                            <textarea id="reason" name="reason" placeholder="මුද්‍රිත පිටපත් ලබාගත් හේතුව විස්තර කරන්න" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="authorized">
+                                <i class="fas fa-user-check label-icon"></i>
+                                Authorized By *
+                            </label>
+                            <div class="input-with-icon">
+                                <select id="authorized" name="authorized" required>
+                                    <option value="">තෝරන්න</option>
+                                    <option value="CC">CC</option>
+                                    <option value="2IC">2IC</option>
+                                    <option value="CO">CO</option>
+                                    <option value="ADJUTANT">ADJUTANT</option>
+                                    <option value="IO">IO</option>
+                                    <option value="OC">OC</option>
+                                </select>
+                                <i class="fas fa-chevron-down input-icon"></i>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-submit">
+                            <i class="fas fa-paper-plane"></i> සබිමිටි කරන්න
+                        </button>
+                        <button type="reset" class="btn btn-reset">
+                            <i class="fas fa-eraser"></i> පෝරමය හිස් කරන්න
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <div class="success-content">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 class="success-title">ස්තුතියි!</h3>
+                        <p class="success-text">ඔබගේ පිළිතුර සාර්ථකව යොමු කර ඇත</p>
+                        <p class="success-text">ඔබගේ මුද්‍රිත පිටපත් ලියාපදිංචි කිරීම සාර්ථකව සම්පූර්ණ විය</p>
+                        <button class="btn btn-new" onclick="showNewForm()">
+                            <i class="fas fa-plus-circle"></i> නව පිටපත් ලියාපදිංචි කිරීම
+                        </button>
                     </div>
-                    <h3 class="success-title">ස්තුතියි!</h3>
-                    <p class="success-text">ඔබගේ පිළිතුර සාර්ථකව යොමු කර ඇත</p>
-                    <p class="success-text">ඔබගේ මුද්‍රිත පිටපත් ලියාපදිංචි කිරීම සාර්ථකව සම්පූර්ණ විය</p>
-                    <button class="btn btn-new" onclick="showNewForm()">
-                        <i class="fas fa-plus-circle"></i> නව පිටපත් ලියාපදිංචි කිරීම
-                    </button>
                 </div>
             </div>
+
+            <div class="form-footer">
+                <p>මෙම custom form එක ඔබගේ Google Form එකට දත්ත ස්වයංක්‍රීයව යොමු කරයි</p>
+            </div>
         </div>
 
-        <div class="form-footer">
-            <p>මෙම custom form එක ඔබගේ Google Form එකට දත්ත ස්වයංක්‍රීයව යොමු කරයි</p>
+        <!-- Right Column - Charts -->
+        <div class="right-column">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2 class="chart-title">
+                        <i class="fas fa-chart-bar chart-icon"></i>
+                        මුද්‍රිත පිටපත් සංඛ්‍යාලේඛන
+                    </h2>
+                    <div class="chart-actions">
+                        <button class="chart-btn" onclick="refreshCharts()">
+                            <i class="fas fa-sync-alt"></i> යාවත්කාලීන කරන්න
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-frame-container">
+                    <iframe class="chart-frame" width="775" height="327" seamless frameborder="0" scrolling="no" 
+                        src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRC18UhLvazcHpjW01wC9isO5xiWvheMSLxuU4l8iqrYoj_MDbqfZg1o8kMMXPpZ_1UUT3X5flHi1Vl/pubchart?oid=1954571074&amp;format=interactive">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Total Chart Container -->
+            <div class="total-chart-container">
+                <div class="total-chart-header">
+                    <h3 class="total-chart-title">
+                        <i class="fas fa-calculator total-chart-icon"></i>
+                        මුළු පිටපත් ගණන
+                    </h3>
+                </div>
+                <div class="total-chart-frame-container">
+                    <iframe class="total-chart-frame" width="166" height="50" seamless frameborder="0" scrolling="no" 
+                        src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRC18UhLvazcHpjW01wC9isO5xiWvheMSLxuU4l8iqrYoj_MDbqfZg1o8kMMXPpZ_1UUT3X5flHi1Vl/pubchart?oid=1260773384&amp;format=interactive">
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="note-section">
+                <p class="note-text">
+                    <i class="fas fa-chart-line note-icon"></i>
+                    මෙම ප්‍රස්තාරය ඔබගේ මුද්‍රිත පිටපත් භාවිතය පිළිබඳ දෘශ්‍යමය නිරූපණයක් සපයයි
+                </p>
+            </div>
         </div>
     </div>
 
@@ -632,6 +824,9 @@
                         // Reset button state
                         submitBtn.innerHTML = originalText;
                         submitBtn.disabled = false;
+                        
+                        // Refresh charts after successful submission
+                        setTimeout(refreshCharts, 1000);
                     })
                     .catch((error) => {
                         console.error('Submission error:', error);
@@ -688,7 +883,26 @@
             successMessage.style.display = 'none';
             mainForm.style.display = 'block';
         }
+        
+        // Function to refresh both charts
+        function refreshCharts() {
+            const iframe = document.querySelector('.chart-frame');
+            const totalIframe = document.querySelector('.total-chart-frame');
+            
+            iframe.src = iframe.src;
+            totalIframe.src = totalIframe.src;
+            
+            // Show a brief loading indicator
+            const refreshBtn = document.querySelector('.chart-btn');
+            const originalText = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> යාවත්කාලීන කරමින්...';
+            refreshBtn.disabled = true;
+            
+            setTimeout(() => {
+                refreshBtn.innerHTML = originalText;
+                refreshBtn.disabled = false;
+            }, 1500);
+        }
     </script>
 </body>
-
 </html>
